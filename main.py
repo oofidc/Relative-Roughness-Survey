@@ -69,11 +69,16 @@ r = redis.Redis(
 
 
 if st.button("Submit Rankings"):
+    #Check if each rating has a different value
+    if(len(set(ratings)) != len(ratings)):
+        st.error("Please make sure each rating is different.")
+        st.stop()
     # Build a dict of image names to ratings
     image_ratings = {
         image_path.name: ratings[i]
         for i, image_path in enumerate(random_images)
     }
+    
     image_ratings['timestamp'] = str(datetime.datetime.now())
     image_ratings['name'] = st.session_state['name']
     image_ratings['gender'] = st.session_state['gender']
