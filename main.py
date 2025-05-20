@@ -4,7 +4,7 @@ from pathlib import Path
 import os, random, redis, json, datetime
 
 st.title("Relative Roughness Survey")
-st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rate each of the imagesfrom 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
+st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rank each of the images from 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
 st.write("We thank you for your participation!")
 #Pick Random Image from Sample_Images Folder if not already done in previous Run
 if not st.session_state.get('random_images'):
