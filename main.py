@@ -25,12 +25,6 @@ if 'name' not in st.session_state:
 else:
     st.session_state['name'] = st.text_input("Enter your name:", value=st.session_state['name'])
 
-if 'gender' not in st.session_state:
-    st.session_state['gender'] = st.selectbox("Select your Gender:", ["Male","Female","None"])
-else:
-    st.session_state['gender'] = st.selectbox("Select your Gender:", ["Male", "Female", "None"],index=["Male", "Female", "None"].index(st.session_state['gender']) )
-
-
 
     
 #Display the Images in a grid
@@ -81,7 +75,7 @@ if st.button("Submit Rankings"):
     
     image_ratings['timestamp'] = str(datetime.datetime.now())
     image_ratings['name'] = st.session_state['name']
-    image_ratings['gender'] = st.session_state['gender']
+
     # Convert to JSON string
     json_data = json.dumps(image_ratings)
 
