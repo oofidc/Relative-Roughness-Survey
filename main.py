@@ -53,13 +53,7 @@ with col5:
     
 
 
-r = redis.Redis(
-    host=st.secrets['database']['url'],
-    port=st.secrets['database']['port'],
-    decode_responses=True,
-    username=st.secrets['database']['username'],
-    password=st.secrets['database']['password'],
-)
+
 
 
 if st.button("Submit Rankings"):
@@ -77,12 +71,13 @@ if st.button("Submit Rankings"):
     image_ratings['name'] = st.session_state['name']
 
     # Convert to JSON string
-    json_data = json.dumps(image_ratings)
+    json_data = json.dumps(image_ratings,indent=4)
 
-    # Push to Redis list (append at the end)
-    r.rpush("survey_results", json_data)
-
-    st.success("Thanks! Your ratings were submitted.")
+    #Create divider and display json data of this current run
+    st.divider()
+    st.code(json_data,language='json')
+    #TODO: Fix so that this link to my email actually goes to my email
+    st.success("Thanks! Your ratings for this session are listed below! Make sure to copy this and send it to [Ndiana Obot's Email](www.ndianaobot8@gmail.com) .")
     if st.button("Complete Survey Again"):
         # Clear the session state and reload the page
         st.session_state['random_images'] = None
