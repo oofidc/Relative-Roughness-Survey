@@ -3,12 +3,8 @@ import fsspec
 from pathlib import Path
 import os, random, json, datetime
 
-st.title("Relative Roughness Survey")
-st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rank each of the images from 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
-st.write("We thank you for your participation!")
 
-#initialize variable of whether to reload random images
-#st.session_state['reset_images'] = True
+
 
 #Pick Random Image from Sample_Images Folder if not already done in previous Run
 if 'reset_images' not in st.session_state or st.session_state['reset_images']:
@@ -17,7 +13,6 @@ if 'reset_images' not in st.session_state or st.session_state['reset_images']:
     #Pick 5 random images from the list
     random_images = []
     for i in range(5):
-        
         rand_index = random.randint(0, len(sample_images)-1)
         print(f"rIndex:{rand_index}")
         random_images.append(sample_images.pop(rand_index))# Remove from list -- Avoiding Duplicates
@@ -100,3 +95,21 @@ if st.button("Submit Rankings"):
         st.session_state['reset_images'] = True
         st.session_state['ratings'] = [0, 0, 0, 0, 0]
         st.rerun()
+
+#selects psuedo-random images and returns their names as a list
+def select_images() -> list:
+    
+
+
+#loads static parts of the webpage
+def load_static():
+    st.title("Relative Roughness Survey")
+    st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rank each of the images from 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
+    st.write("We thank you for your participation!")
+
+
+def main():
+    load_static()
+    return
+
+if __name__ == '__main__': main()
