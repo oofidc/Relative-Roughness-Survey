@@ -73,13 +73,7 @@ def load_static():
     st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rank each of the images from 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
     st.write("We thank you for your participation!")
 
-def reload_form():
-    rand_images = select_images()
-    st.session_state['random_images'] = rand_images  # <-- update session state
-    ratings = [0, 0, 0, 0, 0]
-    st.session_state['ratings'] = ratings
-    ratings, st_imgs = display_images(rand_images)
-    await_submission(ratings, rand_images)
+
 
 def await_submission(ratings, rand_images):
     if st.button("Submit Rankings"):
