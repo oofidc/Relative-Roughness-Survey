@@ -29,7 +29,7 @@ def display_images(random_images:list) -> tuple:
     ratings = st.session_state.get('ratings', [0, 0, 0, 0, 0])
     st_imgs = []
     with col1:
-        print("debug -- this is running")
+        #print("debug -- this is running")
         st_imgs.append(st.image(random_images[0],   use_container_width=True))
         ratings[0] = st.number_input( "Image 1", min_value=1, max_value=5, step=1, key="image_rating_1")
         
@@ -62,7 +62,7 @@ def select_images() -> list:
     random_images = []
     for i in range(5):
         rand_index = random.randint(0, len(sample_images)-1)
-        print(f"rIndex:{rand_index}")
+        #print(f"rIndex:{rand_index}")
         random_images.append(sample_images.pop(rand_index))# Remove from list -- Avoiding Duplicate
     return random_images
 
@@ -91,14 +91,16 @@ def await_submission(ratings, rand_images):
         st.divider()
         st.code(json.dumps(history, indent=4), language='json')
         st.success("Thanks! Your ratings for this session are listed below! Make sure to copy this and send it to [Ndiana Obot's Email](mailto:ndianaobot8@gmail.com) .")
-        if st.button("Complete Survey Again"):
-            reload_form()  # <-- just call reload_form, which resets images and ratings
+    if st.button("Get More Images"):
+        st.session_state['reload_form'] = True
+        st.rerun()
             
 def main():
     load_static()
-    if not st.session_state.get('random_images'):
+    if not st.session_state.get('random_images') or st.session_state.get('reload_form',False):
         rand_images = select_images()
         st.session_state['random_images'] = rand_images
+        st.session_state['reload_form'] = False
     else:
         rand_images = st.session_state['random_images']
     
