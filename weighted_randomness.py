@@ -49,6 +49,7 @@ class weight_randomness:
         counts : dict = tuple_counts(rrs_dict)
         self.freqs = invert_freqs(counts_to_freqs(counts))
    
+   #Takes the current image to determine the next image, weighted towards combinations which have been captured less 
     def next_rand_img(self, image:str):
         potential_next_images = []
         for key_tuple, value in self.freqs.items():
@@ -62,7 +63,7 @@ class weight_randomness:
         
         #get minimum frequency and maximum frequncy before generating a random flaot within range
         min_freq = min([tuple_[1] for tuple_ in potential_next_images])
-        max_freq = max([tuple_[1] for tuple_ in potential_next_images])
+        max_freq = sum([tuple_[1] for tuple_ in potential_next_images])
         r_float = random.uniform(min_freq,max_freq)
         
         freq_sum = 0
