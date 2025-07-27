@@ -65,7 +65,7 @@ def select_images() -> list:
 
     #Pick 5 random images`` from the list
     #First try to use weighted images but if that doesn't work put up an alert and then use regular random images
-    image_randomizer = weight_randomness(st.session_state.get('history',[]))
+    image_randomizer = weight_randomness(st.session_state.get('history',[]),directory='Sample_Images/')
     random_images = image_randomizer.n_random_images(random_image(sample_images), 5)
     if random_images is None:
         st.warning("These images weren't generated with a weighted random chance\n If your name is not Ndiana this isn't really important")
