@@ -63,12 +63,12 @@ class weight_randomness:
         if(type(image) != str):
             image = image.name.split('\\')[-1]# fixed bug using this, ensures that it's only the shortened version of the filename
             image = image.split('/')[-1]
-        print("DEBUG -- NEXT RAND IMG METHOD RUNNING")
+        #print("DEBUG -- NEXT RAND IMG METHOD RUNNING")
         potential_next_images = []
         for key_tuple, value in self.freqs.items():
-            print(f"DEBUG -- I'm inside of the Loop -- Image:{image},0:{key_tuple[0]},1:{key_tuple[1]}")
+            #print(f"DEBUG -- I'm inside of the Loop -- Image:{image},0:{key_tuple[0]},1:{key_tuple[1]}")
             if image == key_tuple[0] or image == key_tuple[1]:
-                print("DEBUG -- IMAGE WAS FOUND IN KEY_TUPLE")
+                #print("DEBUG -- IMAGE WAS FOUND IN KEY_TUPLE")
 
                 other_image = key_tuple[1] if key_tuple[0] == image else key_tuple[0]
                 print((other_image,value))
@@ -76,7 +76,7 @@ class weight_randomness:
 
         #TODO: I need an actual failback with this because this would crash my program ngl
         if not potential_next_images:
-            print("DEBUG -- No Potential Next Images, Returning None")
+            #print("DEBUG -- No Potential Next Images, Returning None")
             return None
         
         #get minimum frequency and maximum frequncy before generating a random flaot within range
@@ -98,7 +98,7 @@ class weight_randomness:
     def n_random_images(self, first_image:str, n=5):
         imgs = [first_image]
         for i in range(1,n):
-            print(f"DEBUG -- {i} in n_random_images iteration \n")
+            #print(f"DEBUG -- {i} in n_random_images iteration \n")
             new_img = self.next_rand_img(imgs[i-1])
             if new_img is None:
                 return None
