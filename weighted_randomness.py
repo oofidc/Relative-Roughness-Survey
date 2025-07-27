@@ -80,5 +80,7 @@ class weight_randomness:
         imgs = [first_image]
         for i in range(1,n):
             new_img = self.next_rand_img(imgs[i-1])
+            if new_img is None:
+                return None
             imgs.append(new_img)
         return imgs
