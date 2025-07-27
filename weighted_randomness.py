@@ -42,7 +42,7 @@ def invert_freqs(dic:dict):
 class weight_randomness:
     def __init__(self,additional_data:list = []):
         rrs_dict : dict
-        with open("../data/RRS_Survey.json") as js:
+        with open("Anonymized_Relative_Roughness_Survey_Results.json") as js:
             rrs_dict = json.load(js)
         
         for result in additional_data:  rrs_dict.append(result) # add additional data to rrs_dict before computing
