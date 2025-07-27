@@ -11,6 +11,7 @@ def sort_tuple(input_tuple:tuple):
     return input_tuple
 
 # I'm pretty sure nothing in this method is named correctly since frequency is a decimal and this is like not, this is just a count but tbh idgaf nobody else will read this code
+# ^ Fixed & Refactored
 # counts the number of times a pair appears and returns a dictionary/map of each tuple and its respective count
 def tuple_counts(dic:dict):
     counts = {}
@@ -74,9 +75,10 @@ class weight_randomness:
             
         # Fallback to last image if somehow we didn't select one
         return potential_next_images[-1][0]
-
-
-
-
-
-        
+    #generates n random images
+    def n_random_images(self, first_image:str, n=5):
+        imgs = [first_image]
+        for i in range(1,n):
+            new_img = self.next_rand_img(imgs[i-1])
+            imgs.append(new_img)
+        return imgs
