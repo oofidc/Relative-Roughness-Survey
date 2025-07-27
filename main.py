@@ -2,6 +2,7 @@ import streamlit as st
 import fsspec
 from pathlib import Path
 import os, random, json, datetime
+from weighted_randomness import weight_randomness
 
 def append_to_history(image_ratings) -> list:
     if 'history' not in st.session_state:
@@ -51,19 +52,27 @@ def display_images(random_images:list) -> tuple:
 
     return ratings, st_imgs
 
-
+#generate a random image
+def random_image(sample_images:list):
+    #Pick Random Image from Sample_Images Folder if not already done in previous Run
+    rand_index = random.randint(0, len(sample_images)-1)
+    return sample_images[rand_index]
 
 #selects psuedo-random images and returns their names as a list
 def select_images() -> list:
-    #Pick Random Image from Sample_Images Folder if not already done in previous Run
     sample_images_path = Path("Sample_Images")
     sample_images = list(sample_images_path.glob("*.jpg")) + list(sample_images_path.glob("*.png"))
+
     #Pick 5 random images`` from the list
-    random_images = []
-    for i in range(5):
-        rand_index = random.randint(0, len(sample_images)-1)
-        #print(f"rIndex:{rand_index}")
-        random_images.append(sample_images.pop(rand_index))# Remove from list -- Avoiding Duplicate
+    #First try to use weighted images but if that doesn't work put up an alert and then use regular random images
+    image_randomizer = weight_randomness(st.session_state.get('history',[]))
+    random_images = image_randomizer.n_random_images(random_image(sample_images), 5)
+    if random_images is None:
+        random_images = []
+        for i in range(5):
+            rand_index = random.randint(0, len(sample_images)-1)
+            #print(f"rIndex:{rand_index}")
+            random_images.append(sample_images.pop(rand_index))# Remove from list -- Avoiding Duplicate
     return random_images
 
 
