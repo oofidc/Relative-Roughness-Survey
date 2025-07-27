@@ -1,0 +1,81 @@
+import json
+import random
+
+# Method sorts tuples so that they are in alphabetical order to ensure each key matches exactly to one set of ratings.
+# Also returns None when they are the exact
+def sort_tuple(input_tuple:tuple):
+    if input_tuple[0] == input_tuple[1]:
+        return None
+    if input_tuple[0]>input_tuple[1]:
+        return (input_tuple[1],input_tuple[0])
+    return input_tuple
+
+# I'm pretty sure nothing in this method is named correctly since frequency is a decimal and this is like not, this is just a count but tbh idgaf nobody else will read this code
+# counts the number of times a pair appears and returns a dictionary/map of each tuple and its respective count
+def tuple_counts(dic:dict):
+    counts = {}
+    for result in dic: #iterate through each survey result in dictionary
+        for i, key_i in  enumerate(result.keys()): #iterate through each specific image except the last one, since al images will have already have been matched with it
+            for j, key_j in enumerate(result.keys()): #iterate through and match current image with other images, O(n!) algorithm
+                if j <= i:
+                    continue
+                image_tuple =  sort_tuple((key_i,key_j))
+                if image_tuple is None:
+                    continue
+                if image_tuple not in counts:
+                    counts[image_tuple] = 1
+                else:
+                    counts[image_tuple] += 1
+    return counts
+
+#convert tuple counts to frequencies
+def counts_to_freqs(dic:dict):
+    total = sum(dic.values())
+    return {key:value/total for key, value in dic.items()}
+
+#turn subtract frequencies from 1, since those wiht lower frequncies should have a higher number to multiply by
+def invert_freqs(dic:dict):
+    return {key:1-value for key, value in dic.items()}
+
+    
+class weight_randomness:
+    def __init__(self,additional_data:list = []):
+        rrs_dict : dict
+        with open("../data/RRS_Survey.json") as js:
+            rrs_dict = json.load(js)
+        
+        for result in additional_data:  rrs_dict.append(result) # add additional data to rrs_dict before computing
+
+        counts : dict = tuple_counts(rrs_dict)
+        self.freqs = invert_freqs(counts_to_freqs(counts))
+   
+    def next_rand_img(self, image:str):
+        potential_next_images = []
+        for key_tuple, value in self.freqs.items():
+            if image in key_tuple:
+                other_image = key_tuple[1] if key_tuple[0] == image else key_tuple[0]
+                potential_next_images.append(tuple(other_image,value))
+
+        #TODO: I need an actual failback with this because this would crash my program ngl
+        if not potential_next_images:
+            return None
+        
+        #get minimum frequency and maximum frequncy before generating a random flaot within range
+        min_freq = min([tuple_[1] for tuple_ in potential_next_images])
+        max_freq = max([tuple_[1] for tuple_ in potential_next_images])
+        r_float = random.uniform(min_freq,max_freq)
+        
+        freq_sum = 0
+        for img in potential_next_images:
+            freq_sum +=  img[1]
+            if freq_sum>r_float:
+                    return img[0]
+            
+        # Fallback to last image if somehow we didn't select one
+        return potential_next_images[-1][0]
+
+
+
+
+
+        
