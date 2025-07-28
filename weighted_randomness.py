@@ -105,6 +105,9 @@ class weight_randomness:
         for i in range(1,n):
             #print(f"DEBUG -- {i} in n_random_images iteration \n")
             new_img = self.next_rand_img(imgs[i-1])
+            #ensure that new_img is not a duplicate
+            while(new_img in imgs):
+                new_img = self.next_rand_img(imgs[i-1])
             if new_img is None:
                 return None
             imgs.append(new_img)
