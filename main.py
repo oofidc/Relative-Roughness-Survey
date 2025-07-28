@@ -5,8 +5,7 @@ from pathlib import Path
 import os, random, json, datetime
 from weighted_randomness import weight_randomness
 
-#TODO: NOne of those code will actually work when streamlit hosts it because I check for the WindowsPath variable. I think I need to just switch these
-# all to str and no more Path variables at all
+
 
 def append_to_history(image_ratings) -> list:
     if 'history' not in st.session_state:
@@ -86,6 +85,9 @@ def select_images() -> list:
 def load_static():
     st.title("Relative Roughness Survey")
     st.write("This is a survey to collect data on the relative roughness of the surface of the images.\n Rank each of the images from 1 to 5, where 1 is the lowest and 5 is the highest relative roughness.")
+    st.write("Your work will not save if you refresh this page or close the browser, so make sure to save your ratings and send them to Ndiana Obot or upload them to the Google Drive folder first")
+    st.write("To submit the survey you can either copy the the json out below and send it to Ndiana Obot over email or click the download button to download the ratings history as a JSON file and share that with Ndiana Obot through Google Drive or through email.")
+    st.write("Please ensure that each rating is different. If you have any questions, please contact Ndiana Obot at [ndianaobot8@gmail.com](mailto:ndianaobot8@gmail.com)")
     st.write("We thank you for your participation!")
 
 
@@ -100,6 +102,8 @@ def await_submission(ratings, rand_images):
         st.divider()
         st.code(json.dumps(history, indent=4), language='json')
         st.success("Thanks! Your ratings for this session are listed below! Make sure to copy this and send it to [Ndiana Obot's Email](mailto:ndianaobot8@gmail.com) .")
+        if len(st.session_state.get('history', [])) > 15:
+            st.warning("You have submitted over 15 ratings, please save your ratings history and reload the page to avoid losing your progress.")
     if st.button("Get More Images"):
         st.session_state['reload_form'] = True
         st.rerun()
