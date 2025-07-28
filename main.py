@@ -15,7 +15,7 @@ def append_to_history(image_ratings) -> list:
         st.session_state['history'].append(image_ratings)
     return st.session_state['history']
 
-def construct_ratings_dictionary(random_images:list,ratings:list) -> list:
+def construct_ratings_dictionary(random_images:list,ratings:list) -> dict:
     image_ratings = {
     
         (image_path): ratings[i] for i, image_path in enumerate(random_images)
@@ -23,9 +23,24 @@ def construct_ratings_dictionary(random_images:list,ratings:list) -> list:
     image_ratings['timestamp'] = str(datetime.datetime.now())
     return image_ratings
 
-
+# Ensures different ratings
+# Returns True if there are no images rated the same, false if there are
 def ensure_diff_ratings(ratings:list) -> bool:    
     return len(set(ratings)) == len(ratings)
+
+
+# This ensures that all ratings are different, i.e., no duplicates exist in the ratings list
+# returns True if this rating is not the same as the previous rating, False otherwise
+# This is used to ensure that the user does not rate the same image twice in a row
+def ensure_not_duplicate(ratings: dict) -> bool:
+    history = st.session_state.get('history', [])
+    if len(history) > 0:
+        # Remove 'timestamp' from both dicts before comparison
+        current = {k: v for k, v in ratings.items() if k != 'timestamp'}
+        last = {k: v for k, v in history[-1].items() if k != 'timestamp'}
+        return current != last
+    return True
+
 
 def display_images(random_images:list) -> tuple:
     #Display the Images in a grid & returns a list of the ratings
@@ -93,17 +108,7 @@ def load_static():
 
 
 def await_submission(ratings, rand_images):
-    if st.button("Submit Rankings"):
-        if not ensure_diff_ratings(ratings):
-            st.error("Please make sure each rating is different.")
-            st.stop()
-        ratings_dict = construct_ratings_dictionary(rand_images, ratings)
-        history = append_to_history(ratings_dict)
-        st.divider()
-        st.code(json.dumps(history, indent=4), language='json')
-        st.success("Thanks! Your ratings for this session are listed below! Make sure to copy this and send it to [Ndiana Obot's Email](mailto:ndianaobot8@gmail.com) .")
-        if len(st.session_state.get('history', [])) > 15:
-            st.warning("You have submitted over 15 ratings, please save your ratings history and reload the page to avoid losing your progress.")
+    
     if st.button("Get More Images"):
         st.session_state['reload_form'] = True
         st.rerun()
@@ -112,6 +117,23 @@ def await_submission(ratings, rand_images):
                            file_name=f'ratings_history_{time.time()}.json',
                            mime='application/json'):
         st.success("Ratings history downloaded successfully!")
+    if st.button("Submit Rankings"):
+        if not ensure_diff_ratings(ratings):
+            st.error("Please make sure each rating is different.")
+            st.stop()
+        
+        ratings_dict = construct_ratings_dictionary(rand_images, ratings)
+        #print(f"r_dict:{ratings_dict}")
+        if not ensure_not_duplicate(ratings_dict):
+            st.error("Duplicate Rating Submission Detected - Generate New Images")
+            st.stop()
+        history = append_to_history(ratings_dict)
+        st.divider()
+        st.code(json.dumps(history, indent=4), language='json')
+        st.success("Thanks! Your ratings for this session are listed below! Make sure to copy this and send it to [Ndiana Obot's Email](mailto:ndianaobot8@gmail.com) .")
+        if len(st.session_state.get('history', [])) > 15:
+            st.warning("You have submitted over 15 ratings, please save your ratings history and reload the page to avoid losing your progress.")
+
 
             
 def main():
@@ -126,10 +148,5 @@ def main():
     ratings, st_imgs = display_images(random_images=rand_images)
     await_submission(ratings,rand_images)
             
-
-        
-
-
-
 if __name__ == '__main__': 
     main()

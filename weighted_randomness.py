@@ -76,7 +76,7 @@ class weight_randomness:
                 #print("DEBUG -- IMAGE WAS FOUND IN KEY_TUPLE")
 
                 other_image = key_tuple[1] if key_tuple[0] == image else key_tuple[0]
-                print((other_image,value))
+                #print((other_image,value))
                 potential_next_images.append((other_image,value))
 
         #TODO: I need an actual failback with this because this would crash my program ngl
