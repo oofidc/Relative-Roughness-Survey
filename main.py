@@ -18,7 +18,7 @@ def append_to_history(image_ratings) -> list:
 def construct_ratings_dictionary(random_images:list,ratings:list) -> list:
     image_ratings = {
     
-        (image_path.name): ratings[i] for i, image_path in enumerate(random_images)
+        (image_path): ratings[i] for i, image_path in enumerate(random_images)
     }
     image_ratings['timestamp'] = str(datetime.datetime.now())
     return image_ratings
@@ -60,7 +60,7 @@ def display_images(random_images:list) -> tuple:
 def random_image(sample_images:list):
     #Pick Random Image from Sample_Images Folder if not already done in previous Run
     rand_index = random.randint(0, len(sample_images)-1)
-    return sample_images[rand_index]
+    return sample_images[rand_index].name.split('\\')[-1].split('/')[-1]
 
 #selects psuedo-random images and returns their names as a list
 def select_images() -> list:
