@@ -4,6 +4,9 @@ from pathlib import Path
 import os, random, json, datetime
 from weighted_randomness import weight_randomness
 
+#TODO: NOne of those code will actually work when streamlit hosts it because I check for the WindowsPath variable. I think I need to just switch these
+# all to str and no more Path variables at all
+
 def append_to_history(image_ratings) -> list:
     if 'history' not in st.session_state:
         st.session_state['history'] = [] 
@@ -14,7 +17,8 @@ def append_to_history(image_ratings) -> list:
 
 def construct_ratings_dictionary(random_images:list,ratings:list) -> list:
     image_ratings = {
-        image_path.name: ratings[i] for i, image_path in enumerate(random_images)
+    
+        (image_path.name): ratings[i] for i, image_path in enumerate(random_images)
     }
     image_ratings['timestamp'] = str(datetime.datetime.now())
     return image_ratings

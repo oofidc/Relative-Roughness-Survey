@@ -56,6 +56,11 @@ class weight_randomness:
 
         counts : dict = tuple_counts(rrs_dict)
         self.freqs = invert_freqs(counts_to_freqs(counts))
+        '''
+        with open('test.json','w') as t:
+            t.write(str(self.freqs))
+        print("sum: " +str(sum([ 1-x for x in self.freqs.values()])))
+        '''
         self.dir = directory
    
    #Takes the current image to determine the next image, weighted towards combinations which have been captured less 
