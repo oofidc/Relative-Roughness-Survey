@@ -1,3 +1,4 @@
+import time
 import streamlit as st
 import fsspec
 from pathlib import Path
@@ -102,6 +103,12 @@ def await_submission(ratings, rand_images):
     if st.button("Get More Images"):
         st.session_state['reload_form'] = True
         st.rerun()
+    if st.download_button("Download Ratings History as JSON",
+                           data=json.dumps(st.session_state.get('history', []), indent=4),
+                           file_name=f'ratings_history_{time.time()}.json',
+                           mime='application/json'):
+        st.success("Ratings history downloaded successfully!")
+
             
 def main():
     load_static()
